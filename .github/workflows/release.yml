@@ -63,7 +63,8 @@ jobs:
       - name: Capture artifact path
         id: artifact
         run: |
-          echo "path=$(ls target/recycler-*.jar)" >> $GITHUB_OUTPUT
+          latest="$(ls -t target/recycler-*.jar | head -n 1)"
+          echo "path=$latest" >> "$GITHUB_OUTPUT"
 
       - name: Commit version bump
         run: |
