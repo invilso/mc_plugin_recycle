@@ -1,0 +1,12 @@
+messages:
+  gui-title: "Recyclinggerät"
+  command:
+    only-players: "Nur Spieler können das Recyclinggerät verwenden."
+    opened: "Das Recyclinggerät wurde geöffnet."
+  recycler:
+    cooldown-input: "Du kannst {item} erst in {time} wieder recyceln."
+    cooldown-reward: "Belohnung {item} befindet sich noch {time} in der Abklingzeit."
+    no-block: "Blockbelohnungen sind derzeit nicht verfügbar; versuche es später erneut."
+    no-item: "Itembelohnungen sind derzeit nicht verfügbar; versuche es später erneut."
+    block-success: "{inputAmount} {input} wurden recycelt und {rewardAmount} {reward} erhalten."
+    stack-success: "Vollständiger Stapel recycelt! {amount} {reward} erhalten."

@@ -1,0 +1,12 @@
+messages:
+  gui-title: "Przetwarzacz"
+  command:
+    only-players: "Tylko gracze mogą korzystać z Przetwarzacza."
+    opened: "Interfejs Przetwarzacza został otwarty."
+  recycler:
+    cooldown-input: "Nie możesz przetworzyć {item} jeszcze przez {time}."
+    cooldown-reward: "Nagroda {item} nadal ma odnowienie przez {time}."
+    no-block: "Nagrody blokowe są chwilowo niedostępne, spróbuj później."
+    no-item: "Nagrody przedmiotowe są chwilowo niedostępne, spróbuj później."
+    block-success: "Przetworzono {inputAmount} {input} i otrzymano {rewardAmount} {reward}."
+    stack-success: "Pełny stos przetworzony! Otrzymano {amount} {reward}."

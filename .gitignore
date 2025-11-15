@@ -1,0 +1,25 @@
+# Maven / Java
+/target/
+*.class
+*.log
+*.tmp
+*.out
+hs_err_pid*
+
+# IDE / Editors
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker/
+*.env.local
+
+# Build artifacts
+recycler-*.jar

@@ -1,0 +1,12 @@
+messages:
+  gui-title: "Переработчик"
+  command:
+    only-players: "Только игроки могут пользоваться рециклером."
+    opened: "Интерфейс рециклера открыт."
+  recycler:
+    cooldown-input: "Нельзя переработать {item} ещё {time}."
+    cooldown-reward: "Награда {item} всё ещё на перезарядке {time}."
+    no-block: "Награды-блоки временно недоступны, попробуйте позже."
+    no-item: "Награды-предметы временно недоступны, попробуйте позже."
+    block-success: "Переработано {inputAmount} {input} и получено {rewardAmount} {reward}."
+    stack-success: "Полный стак переработан! Получено {amount} {reward}."

@@ -1,0 +1,12 @@
+messages:
+  gui-title: "Перапрацоўшчык"
+  command:
+    only-players: "Толькі гульцы могуць карыстацца перапрацоўшчыкам."
+    opened: "Інтэрфейс перапрацоўшчыка адкрыты."
+  recycler:
+    cooldown-input: "Ты не можаш перапрацаваць {item} яшчэ {time}."
+    cooldown-reward: "Узнагарода {item} усё яшчэ на перазарадцы {time}."
+    no-block: "Блокавыя ўзнагароды часова недаступныя, паспрабуй пазней."
+    no-item: "Прадметныя ўзнагароды часова недаступныя, паспрабуй пазней."
+    block-success: "Перапрацавана {inputAmount} {input} і атрымана {rewardAmount} {reward}."
+    stack-success: "Поўны стак перапрацаваны! Атрымана {amount} {reward}."

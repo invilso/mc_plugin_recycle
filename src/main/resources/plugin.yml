@@ -1,0 +1,9 @@
+name: Recycler
+main: com.example.recycler.RecyclerPlugin
+version: 1.0.0
+api-version: 1.21
+authors:
+  - Recycler Team
+commands:
+  recycle:
+    description: Opens the Recycler GUI.

@@ -1,0 +1,12 @@
+messages:
+  gui-title: "Item Recycler"
+  command:
+    only-players: "Only players can recycle items."
+    opened: "Opened the Recycler GUI."
+  recycler:
+    cooldown-input: "You cannot recycle {item} for another {time}."
+    cooldown-reward: "Reward {item} is still on cooldown for {time}."
+    no-block: "No block reward is available right now; try again soon."
+    no-item: "No item reward is available right now; try again soon."
+    block-success: "Recycled {inputAmount} {input} and received {rewardAmount} {reward}."
+    stack-success: "Full stack recycled! Received {amount} {reward}."

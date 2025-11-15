@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  recycler-build:
+    image: maven:3.9-eclipse-temurin-21
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+      - maven-cache:/root/.m2
+    command: mvn -B --no-transfer-progress clean package
+
+volumes:
+  maven-cache:

@@ -1,0 +1,12 @@
+messages:
+  gui-title: "Taaskasutaja"
+  command:
+    only-players: "Ainult mängijad saavad Taaskasutajat kasutada."
+    opened: "Taaskasutaja kasutajaliides on avatud."
+  recycler:
+    cooldown-input: "Sa ei saa {item} veel {time} taaskasutada."
+    cooldown-reward: "Auhind {item} on veel jahtumisajal {time}."
+    no-block: "Plokiauhinnad pole praegu saadaval, proovi hiljem uuesti."
+    no-item: "Esemeauhinnad pole praegu saadaval, proovi hiljem uuesti."
+    block-success: "Taaskasutati {inputAmount} {input} ja saadi {rewardAmount} {reward}."
+    stack-success: "Täisvirn taaskasutatud! Saadi {amount} {reward}."

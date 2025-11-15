@@ -1,0 +1,93 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Temurin JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Run tests
+        run: mvn -B --no-transfer-progress clean verify
+
+      - name: Determine next version
+        id: version
+        run: |
+          python - <<'PY' >> $GITHUB_OUTPUT
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          ns = {'m': 'http://maven.apache.org/POM/4.0.0'}
+          root = ET.parse('pom.xml').getroot()
+          current = root.find('m:version', ns)
+          if current is None or current.text is None:
+              raise SystemExit('Missing <version> in pom.xml')
+          value = current.text.strip()
+          if not (value.startswith('v') and value[1:].isdigit()):
+              raise SystemExit('Version must be in v<number> format')
+          next_value = f"v{int(value[1:]) + 1}"
+          print(f"current={value}")
+          print(f"next={next_value}")
+          PY
+
+      - name: Bump project version
+        run: python scripts/bump_version.py
+
+      - name: Package plugin (skip tests)
+        run: mvn -B --no-transfer-progress -DskipTests package
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -t recycler:${{ steps.version.outputs.next }} .
+
+      - name: Capture artifact path
+        id: artifact
+        run: |
+          echo "path=$(ls target/recycler-*.jar)" >> $GITHUB_OUTPUT
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -am "chore: bump version to ${{ steps.version.outputs.next }} [skip ci]"
+            git push origin HEAD:main
+          fi
+
+      - name: Tag release
+        run: |
+          git tag ${{ steps.version.outputs.next }}
+          git push origin ${{ steps.version.outputs.next }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.next }}
+          name: Recycler ${{ steps.version.outputs.next }}
+          files: ${{ steps.artifact.outputs.path }}
+          body: |
+            Automated release ${{ steps.version.outputs.next }}
+            - Tests executed via Maven
+            - Docker image built locally for validation
