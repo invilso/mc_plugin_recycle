@@ -38,6 +38,7 @@ jobs:
           fi
           latest=$(ls -t "${files[@]}" | head -n 1)
           echo "path=$latest" >> "$GITHUB_OUTPUT"
+          echo "file=$(basename "$latest")" >> "$GITHUB_OUTPUT"
 
       - name: Upload plugin jar
         id: upload
@@ -50,11 +51,13 @@ jobs:
         uses: actions/github-script@v7
         env:
           ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
-          ARTIFACT_NAME: ${{ steps.upload.outputs.artifact-name }}
+          ARTIFACT_LABEL: ${{ steps.artifact.outputs.file }}
         with:
           script: |
             const marker = '<!-- recycler-pr-ci -->';
-            const body = `${marker}\n✅ CI succeeded for commit ${context.payload.pull_request.head.sha}.\n- Artifact: [${process.env.ARTIFACT_NAME}](${process.env.ARTIFACT_URL})\n- Command: \`mvn clean verify\``;
+            const label = process.env.ARTIFACT_LABEL || 'recycler-plugin';
+            const url = process.env.ARTIFACT_URL;
+            const body = `${marker}\n✅ CI succeeded for commit ${context.payload.pull_request.head.sha}.\n- Artifact: [${label}](${url})\n- Command: \`mvn clean verify\``;
             const {owner, repo} = context.repo;
             const issue_number = context.issue.number;
             const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
