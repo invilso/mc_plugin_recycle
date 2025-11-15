@@ -48,6 +48,21 @@ jobs:
           print(f"next={next_value}")
           PY
 
+      - name: Collect commits since last release
+        id: notes
+        run: |
+          repo_url="https://github.com/${{ github.repository }}"
+          current="${{ steps.version.outputs.current }}"
+          if git rev-parse "$current" >/dev/null 2>&1; then
+            commits="$(git log "${current}..HEAD" --pretty=format:"- [\`%h\`]($repo_url/commit/%H) %s")"
+            if [ -z "$commits" ]; then
+              commits="- No commits since $current"
+            fi
+          else
+            commits="- Initial release"
+          fi
+          printf 'commits<<EOF\n%s\nEOF\n' "$commits" >> "$GITHUB_OUTPUT"
+
       - name: Bump project version
         run: python scripts/bump_version.py
 
@@ -92,3 +107,6 @@ jobs:
             Automated release ${{ steps.version.outputs.next }}
             - Tests executed via Maven
             - Docker image built locally for validation
+
+            Commits included:
+            ${{ steps.notes.outputs.commits }}
