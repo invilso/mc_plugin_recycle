@@ -21,6 +21,11 @@ Taaskasutaja (Recycler) on kerge Paper 1.21.9 plugina, mis laseb mängijatel muu
 - Sõnumid asuvad `src/main/resources/lang/*.yml`; lisa uus keel, kopeerides võtmed ja tõlkides väärtused.
 - Mängijad näevad sõnumeid oma kliendi keeles, kui vastav locale on olemas.
 
+## Compatibility
+
+- Testitud Paper API `1.21.9`-ga (vt `pom.xml` `<paper.version>`). Teised 1.21.x versioonid ja Paperi tuletised (näiteks Purpur 1.21.9) tõenäoliselt töötavad, kuid kasutage neid omal vastutusel.
+- Nõuab Java 21 ehitamiseks ja käivitamiseks.
+
 ## Ehitamine
 
 Käivita Maven repositooriumi juurkaustas:

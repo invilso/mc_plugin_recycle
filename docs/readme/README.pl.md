@@ -21,6 +21,11 @@ Przetwarzacz (Recycler) to lekka wtyczka Paper 1.21.9, która pozwala graczom za
 - Komunikaty znajdują się w `src/main/resources/lang/*.yml`; aby dodać język, skopiuj te same klucze i przetłumacz wartości.
 - Gracze widzą komunikaty w języku klienta, jeśli dana locale istnieje.
 
+## Compatibility
+
+- Testowano z Paper API `1.21.9` (zobacz `<paper.version>` w `pom.xml`). Inne wersje 1.21.x i forki oparte na Paper (np. Purpur 1.21.9) najprawdopodobniej będą działać, ale używaj ich na własne ryzyko.
+- Wymagana Java 21 do budowy i uruchomienia.
+
 ## Budowanie
 
 Uruchom Maven w katalogu głównym repozytorium:
