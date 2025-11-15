@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public class RecycleListener implements Listener {
     private final RecyclerPlugin plugin;
@@ -36,6 +37,7 @@ public class RecycleListener implements Listener {
     private final EnchantmentRoller enchantmentRoller;
     private final Messages messages;
     private final TranslationService translationService;
+    private static final int MAX_REWARD_CREATION_ATTEMPTS = 4;
 
     public RecycleListener(RecyclerPlugin plugin,
                            ThreadLocalRandom random,
@@ -219,38 +221,54 @@ public class RecycleListener implements Listener {
     }
 
     private ItemStack createRandomBlockReward(UUID playerId, ItemStack stack) {
-        Material rewardMaterial = rewardSelector.pickRewardMaterial(
-            stack.getType(),
-            rewardPools.getBlockRewards(),
-            false,
-            material -> plugin.hasCooldown(playerId, material));
-        if (rewardMaterial == null) {
-            return null;
-        }
+        for (int attempt = 0; attempt < MAX_REWARD_CREATION_ATTEMPTS; attempt++) {
+            Material rewardMaterial = pickSafeMaterial(() -> rewardSelector.pickRewardMaterial(
+                    stack.getType(),
+                    rewardPools.getBlockRewards(),
+                    false,
+                    material -> plugin.hasCooldown(playerId, material)), true);
+            if (rewardMaterial == null) {
+                return null;
+            }
 
-        int maxStackSize = rewardMaterial.getMaxStackSize();
-        int amount = Math.min(stack.getAmount(), maxStackSize);
-        amount = Math.max(1, amount);
-        return new ItemStack(rewardMaterial, amount);
+            int maxStackSize = rewardMaterial.getMaxStackSize();
+            int amount = Math.min(stack.getAmount(), maxStackSize);
+            amount = Math.max(1, amount);
+            ItemStack reward = tryCreateStack(rewardMaterial, amount);
+            if (reward != null) {
+                return reward;
+            }
+        }
+        plugin.getLogger().warning("Failed to build block reward for input " + stack.getType() + " after " + MAX_REWARD_CREATION_ATTEMPTS + " attempts");
+        return null;
     }
 
     private ItemStack createRandomItemReward(UUID playerId, ItemStack stack) {
-        Material rewardMaterial = rewardSelector.pickRewardMaterial(
-                stack.getType(),
-                rewardPools.getItemRewards(),
-                true,
-                material -> plugin.hasCooldown(playerId, material));
-        if (rewardMaterial == null) {
-            return null;
-        }
+        for (int attempt = 0; attempt < MAX_REWARD_CREATION_ATTEMPTS; attempt++) {
+            Material rewardMaterial = pickSafeMaterial(() -> rewardSelector.pickRewardMaterial(
+                    stack.getType(),
+                    rewardPools.getItemRewards(),
+                    true,
+                    material -> plugin.hasCooldown(playerId, material)), false);
+            if (rewardMaterial == null) {
+                return null;
+            }
 
-        ItemStack reward = new ItemStack(rewardMaterial, 1);
-        if (rewardMaterial.getMaxStackSize() > 1 && random.nextDouble() < settings.getDoubleRewardChance()) {
-            reward.setAmount(2);
-        }
+            int amount = 1;
+            if (rewardMaterial.getMaxStackSize() > 1 && random.nextDouble() < settings.getDoubleRewardChance()) {
+                amount = 2;
+            }
 
-        enchantmentRoller.tryApplyEnchantments(reward);
-        return reward;
+            ItemStack reward = tryCreateStack(rewardMaterial, amount);
+            if (reward == null) {
+                continue;
+            }
+
+            enchantmentRoller.tryApplyEnchantments(reward);
+            return reward;
+        }
+        plugin.getLogger().warning("Failed to build item reward after " + MAX_REWARD_CREATION_ATTEMPTS + " attempts");
+        return null;
     }
 
     private boolean isFullStackRewardEligible(ItemStack stack) {
@@ -290,5 +308,41 @@ public class RecycleListener implements Listener {
             return minutes + " minute" + (minutes == 1 ? "" : "s") + " and " + seconds + " second" + (seconds == 1 ? "" : "s");
         }
         return seconds + " second" + (seconds == 1 ? "" : "s");
+    }
+
+    private Material pickSafeMaterial(Supplier<Material> supplier, boolean requireBlockItem) {
+        final int maxAttempts = 8;
+        for (int attempt = 0; attempt < maxAttempts; attempt++) {
+            Material candidate = supplier.get();
+            if (candidate == null) {
+                return null;
+            }
+            if (candidate == Material.AIR) {
+                continue;
+            }
+            if (!candidate.isItem()) {
+                plugin.getLogger().warning(() ->
+                        "Skipping reward material " + candidate + " because it is not an item");
+                continue;
+            }
+            if (requireBlockItem && !candidate.isBlock()) {
+                plugin.getLogger().warning(() ->
+                        "Skipping reward material " + candidate + " because it is not a block item");
+                continue;
+            }
+            return candidate;
+        }
+        plugin.getLogger().warning("Failed to select a valid reward material after " + maxAttempts + " attempts");
+        return null;
+    }
+
+    private ItemStack tryCreateStack(Material material, int amount) {
+        try {
+            return new ItemStack(material, amount);
+        } catch (IllegalArgumentException ex) {
+            plugin.getLogger().warning(() ->
+                    "Unable to create ItemStack for reward material " + material + ": " + ex.getMessage());
+            return null;
+        }
     }
 }
