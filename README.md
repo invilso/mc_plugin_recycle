@@ -67,6 +67,7 @@ mvn test
 - `.github/workflows/release.yml` triggers on pushes to `main` or manual dispatch.
 - Steps: Maven verify → compute & bump version → package jar → build the Docker image → commit + tag → publish a GitHub Release with the fresh jar.
 - Version bump commits include `[skip ci]`, preventing infinite workflow loops while still keeping `pom.xml` in sync.
+- `.github/workflows/pr-ci.yml` runs for every opened/reopened/synchronized pull request, executes `mvn clean verify`, uploads the built jar as a workflow artifact, and posts/updates a PR comment with a direct download link so reviewers can grab the latest build without leaving the discussion.
 
 ## Usage
 

@@ -1,0 +1,66 @@
+name: PR CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Temurin JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Run tests
+        run: mvn -B --no-transfer-progress clean verify
+
+      - name: Capture jar path
+        id: artifact
+        run: |
+          shopt -s nullglob
+          files=(target/recycler-*.jar)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No built jars found" >&2
+            exit 1
+          fi
+          latest=$(ls -t "${files[@]}" | head -n 1)
+          echo "path=$latest" >> "$GITHUB_OUTPUT"
+
+      - name: Upload plugin jar
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: recycler-plugin
+          path: ${{ steps.artifact.outputs.path }}
+
+      - name: Comment with build link
+        uses: actions/github-script@v7
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+          ARTIFACT_NAME: ${{ steps.upload.outputs.artifact-name }}
+        with:
+          script: |
+            const marker = '<!-- recycler-pr-ci -->';
+            const body = `${marker}\n✅ CI succeeded for commit ${context.payload.pull_request.head.sha}.\n- Artifact: [${process.env.ARTIFACT_NAME}](${process.env.ARTIFACT_URL})\n- Command: \`mvn clean verify\``;
+            const {owner, repo} = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const existing = comments.find(comment => comment.user?.login === 'github-actions[bot]' && comment.body?.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }
