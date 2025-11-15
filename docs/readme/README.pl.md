@@ -21,16 +21,6 @@ Przetwarzacz (Recycler) to lekka wtyczka Paper 1.21.9, która pozwala graczom za
 - Komunikaty znajdują się w `src/main/resources/lang/*.yml`; aby dodać język, skopiuj te same klucze i przetłumacz wartości.
 - Gracze widzą komunikaty w języku klienta, jeśli dana locale istnieje.
 
-| Locale | Nazwa kanoniczna |
-| --- | --- |
-| `en_us` | Recycler |
-| `uk_ua` | Перероблювач |
-| `ru_ru` | Переработчик |
-| `be_by` | Перапрацоўшчык |
-| `pl_pl` | Przetwarzacz |
-| `et_ee` | Taaskasutaja |
-| `de_de` | Recyclinggerät |
-
 ## Budowanie
 
 Uruchom Maven w katalogu głównym repozytorium:

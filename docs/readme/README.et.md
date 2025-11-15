@@ -21,16 +21,6 @@ Taaskasutaja (Recycler) on kerge Paper 1.21.9 plugina, mis laseb mängijatel muu
 - Sõnumid asuvad `src/main/resources/lang/*.yml`; lisa uus keel, kopeerides võtmed ja tõlkides väärtused.
 - Mängijad näevad sõnumeid oma kliendi keeles, kui vastav locale on olemas.
 
-| Locale | Kaanoniline nimi |
-| --- | --- |
-| `en_us` | Recycler |
-| `uk_ua` | Перероблювач |
-| `ru_ru` | Переработчик |
-| `be_by` | Перапрацоўшчык |
-| `pl_pl` | Przetwarzacz |
-| `et_ee` | Taaskasutaja |
-| `de_de` | Recyclinggerät |
-
 ## Ehitamine
 
 Käivita Maven repositooriumi juurkaustas:

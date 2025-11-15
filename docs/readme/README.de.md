@@ -21,16 +21,6 @@ Das Recyclinggerät (Recycler) ist ein leichtes Paper-1.21.9-Plugin, mit dem Spi
 - Nachrichten liegen unter `src/main/resources/lang/*.yml`; füge neue Sprachen hinzu, indem du die Schlüssel kopierst und übersetzt.
 - Spieler sehen Nachrichten in der Sprache ihres Clients, sofern ein passendes Locale existiert.
 
-| Locale | Kanonischer Name |
-| --- | --- |
-| `en_us` | Recycler |
-| `uk_ua` | Перероблювач |
-| `ru_ru` | Переработчик |
-| `be_by` | Перапрацоўшчык |
-| `pl_pl` | Przetwarzacz |
-| `et_ee` | Taaskasutaja |
-| `de_de` | Recyclinggerät |
-
 ## Build
 
 Führe Maven im Repository-Stamm aus:
