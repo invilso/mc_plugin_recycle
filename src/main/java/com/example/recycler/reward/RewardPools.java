@@ -11,11 +11,12 @@ public final class RewardPools {
 
     public RewardPools(RecyclerSettings settings) {
         this.blockRewards = Arrays.stream(Material.values())
-                .filter(Material::isBlock)
-                .filter(material -> material != Material.AIR)
-                .filter(material -> material.getMaxStackSize() > 0)
-                .filter(material -> !settings.getExcludedMaterials().contains(material))
-                .toList();
+            .filter(Material::isBlock)
+            .filter(Material::isItem)
+            .filter(material -> material != Material.AIR)
+            .filter(material -> material.getMaxStackSize() > 0)
+            .filter(material -> !settings.getExcludedMaterials().contains(material))
+            .toList();
 
         this.itemRewards = Arrays.stream(Material.values())
                 .filter(Material::isItem)
