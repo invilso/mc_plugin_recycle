@@ -21,6 +21,11 @@ Das Recyclinggerät (Recycler) ist ein leichtes Paper-1.21.9-Plugin, mit dem Spi
 - Nachrichten liegen unter `src/main/resources/lang/*.yml`; füge neue Sprachen hinzu, indem du die Schlüssel kopierst und übersetzt.
 - Spieler sehen Nachrichten in der Sprache ihres Clients, sofern ein passendes Locale existiert.
 
+## Compatibility
+
+- Getestet mit Paper API `1.21.9` (siehe `<paper.version>` in `pom.xml`). Andere 1.21.x-Versionen und Paper-basierte Forks (z. B. Purpur 1.21.9) funktionieren höchstwahrscheinlich, können aber auf eigenes Risiko verwendet werden.
+- Erfordert Java 21 zum Bauen und Ausführen.
+
 ## Build
 
 Führe Maven im Repository-Stamm aus:

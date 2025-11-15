@@ -21,6 +21,11 @@ Recycler is a lightweight Paper 1.21.9 plugin that lets players gamble raw mater
 - Messages live in `src/main/resources/lang/*.yml`; add more by mirroring the same keys and restarting/reloading.
 - Players automatically see messages in their client language when a matching locale file exists.
 
+## Compatibility
+
+- Tested against Paper API `1.21.9` (see `pom.xml` `<paper.version>`). Other 1.21.x builds and Paper-derived forks (for example Purpur 1.21.9) will most likely work, but use them at your own risk.
+- Requires Java 21 to build and run.
+
 ## Building
 
 Run the following Maven command in the repository root to compile the plugin:
