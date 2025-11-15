@@ -21,16 +21,6 @@ Recycler is a lightweight Paper 1.21.9 plugin that lets players gamble raw mater
 - Messages live in `src/main/resources/lang/*.yml`; add more by mirroring the same keys and restarting/reloading.
 - Players automatically see messages in their client language when a matching locale file exists.
 
-| Locale | Canonical Name |
-| --- | --- |
-| `en_us` | Recycler |
-| `uk_ua` | Перероблювач |
-| `ru_ru` | Переработчик |
-| `be_by` | Перапрацоўшчык |
-| `pl_pl` | Przetwarzacz |
-| `et_ee` | Taaskasutaja |
-| `de_de` | Recyclinggerät |
-
 ## Building
 
 Run the following Maven command in the repository root to compile the plugin:
@@ -86,6 +76,6 @@ mvn test
 ## Usage
 
 1. Drop the compiled JAR into your server's `plugins/` folder.
-2. Start the server on Paper 1.21.9 with Java 17.
+2. Start the server on Paper 1.21.9 with Java 21.
 3. Use `/recycle` to open the GUI, place the required stack in slot 1, and receive the reward.
 4. Attempting to recycle while on cooldown will show a cooldown message; closing with an item inside returns it safely.
