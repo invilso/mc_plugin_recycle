@@ -69,6 +69,20 @@ mvn test
 - Version bump commits include `[skip ci]`, preventing infinite workflow loops while still keeping `pom.xml` in sync.
 - `.github/workflows/pr-ci.yml` runs for every opened/reopened/synchronized pull request, executes `mvn clean verify`, uploads the built jar as a workflow artifact, and posts/updates a PR comment with a direct download link so reviewers can grab the latest build without leaving the discussion.
 
+### Pull request expectations
+
+- **Branch naming:** pick a concise kebab-cased topic and prepend one of the flexible prefixes below so reviewers instantly know the intent:
+	- `feat/<topic>` – new gameplay features or major behaviour additions.
+	- `fix/<topic>` – bug fixes and regressions.
+	- `enh/<topic>` – refinements, performance tweaks, or design polish.
+	- `docs/<topic>` – README, guides, or translation-only updates.
+	- `chore/<topic>` – tooling, CI, dependency, or infrastructure changes.
+	- `test/<topic>` – test-only additions or refactors.
+	Feel free to extend the pattern if you need something more specific (`build/`, `refactor/`, etc.), but keep the `prefix/topic` shape for consistency (e.g., `docs/pr-guidelines`).
+- **Pre-flight checks:** run `mvn clean verify` locally before pushing to ensure the same checks the PR workflow runs will pass. If you rely on the CI artifact, wait for the bot comment to confirm the build succeeded before requesting review.
+- **PR description:** summarize intent, testing performed, and any follow-up work. Link to issues when applicable and call out any configuration changes for server owners.
+- **Scope:** prefer focused PRs in the 1–3 feature range; open follow-up branches if you need to tackle unrelated work so reviews stay manageable.
+
 ## Usage
 
 1. Drop the compiled JAR into your server's `plugins/` folder.
