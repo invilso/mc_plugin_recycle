@@ -5,7 +5,7 @@
 
     <groupId>com.example.recycler</groupId>
     <artifactId>recycler</artifactId>
-    <version>v3</version>
+    <version>v4</version>
     <name>Recycler</name>
     <description>Item recycling utility for Paper 1.21.9.</description>
     <url>https://example.com/recycler</url>
